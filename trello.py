@@ -44,12 +44,42 @@ class TrelloSession:
 
         return json.loads(response.read().decode('utf-8'))
 
+class Card:
+    def __init__(self, session, data):
+        self._session = session
+        self._data = data
+        self.name = self._data['name']
+        self.id = self._data['id']
+        self._labels = None
+
+    @property
+    def labels(self):
+        if self._labels == None:
+            self._labels = {}
+            for l in self._data['labels']:
+                label = Label(self._session, l)
+                self._labels[label.name] = label
+
+        return self._labels
+
 class List:
     def __init__(self, session, data):
         self._session = session
         self._data = data
         self.name = self._data['name']
         self.id = self._data['id']
+        self._cards = None
+
+    @property
+    def cards(self):
+        if self._cards == None:
+            self._cards = {}
+            for c in self._session.request('GET', '/1/lists/{}/cards' \
+                                           .format(self.id)):
+                card = Card(self._session, c)
+                self._cards[card.name] = card
+
+        return self._cards
 
     def createCard(self, name, descr, labels = ""):
         data = {
