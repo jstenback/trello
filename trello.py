@@ -62,6 +62,9 @@ class Card:
 
         return self._labels
 
+    def delete(self):
+        self._session.request('DELETE', '/1/cards/{}'.format(self.id))
+
 class List:
     def __init__(self, session, data):
         self._session = session
