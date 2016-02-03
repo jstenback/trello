@@ -62,6 +62,15 @@ class Card:
 
         return self._labels
 
+    @property
+    def shortUrl(self):
+        return self._data['shortUrl']
+
+    def addComment(self, comment):
+        self._session.request('POST',
+                              '/1/cards/{}/actions/comments'.format(self.id),
+                              {'text': comment})
+
     def delete(self):
         self._session.request('DELETE', '/1/cards/{}'.format(self.id))
 
@@ -84,17 +93,19 @@ class List:
 
         return self._cards
 
-    def createCard(self, name, descr, labels = ""):
+    def createCard(self, name, descr, labels = "", members = ""):
         data = {
             'name': name,
             'desc': descr,
             'due': "null",
             'urlSource': "null",
             'idList': self.id,
-            'idLabels': labels
+            'idLabels': labels,
+            'idMembers': members
         }
 
-        return self._session.request('POST', '/1/cards', data)
+        return Card(self._session,
+                    self._session.request('POST', '/1/cards', data))
 
 class Label:
     def __init__(self, session, data):
