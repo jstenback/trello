@@ -12,7 +12,9 @@ class TrelloSession:
 
         self._boards = None
 
-        with open(os.path.expanduser("~/.trello"), 'r') as f:
+        path = os.path.join(os.path.expanduser("~"), ".trello")
+
+        with open(path, 'r') as f:
             self._config = json.load(f)
 
         self._key = self._config['key']
