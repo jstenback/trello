@@ -110,6 +110,16 @@ class Member:
         self.username = self._data['username']
         self.fullName = self._data['fullName']
         self.id = self._data['id']
+        self._initials = None
+
+    @property
+    def initials(self):
+        if self._initials == None:
+            self._initials = self._session.request('GET',
+                                                   '/1/members/{}/initials' \
+                                                   .format(self.id))['_value']
+
+        return self._initials
 
 class Board:
     def __init__(self, session, data):
@@ -167,6 +177,11 @@ class Board:
                               .format(self.id, name),
                               {'idMember': name,
                                'type': member_type})
+
+    def delMember(self, id):
+        self._session.request('DELETE', '/1/boards/{}/members/{}' \
+                              .format(self.id, id),
+                              {'idMember': id})
 
     def copyMembers(self, to_board):
         for member in self.members:
