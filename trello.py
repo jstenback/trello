@@ -54,6 +54,9 @@ class Card:
         self.id = self._data['id']
         self._labels = None
 
+    def __repr__(self):
+        return "Card: " + json.dumps(self._data, indent = 4, sort_keys = True)
+
     @property
     def labels(self):
         if self._labels == None:
@@ -83,6 +86,9 @@ class List:
         self.name = self._data['name']
         self.id = self._data['id']
         self._cards = None
+
+    def __repr__(self):
+        return "List: " + json.dumps(self._data, indent = 4, sort_keys = True)
 
     @property
     def cards(self):
@@ -116,6 +122,9 @@ class Label:
         self.name = self._data['name']
         self.id = self._data['id']
 
+    def __repr__(self):
+        return "List: " + json.dumps(self._data, indent = 4, sort_keys = True)
+
 class Member:
     def __init__(self, session, data):
         self._session = session
@@ -124,6 +133,9 @@ class Member:
         self.fullName = self._data['fullName']
         self.id = self._data['id']
         self._initials = None
+
+    def __repr__(self):
+        return "Member: " + json.dumps(self._data, indent = 4, sort_keys = True)
 
     @property
     def initials(self):
@@ -144,6 +156,9 @@ class Board:
         self._lists = None
         self._labels = None
         self._members = None
+
+    def __repr__(self):
+        return "Board: " + json.dumps(self._data, indent = 4, sort_keys = True)
 
     @property
     def lists(self):
