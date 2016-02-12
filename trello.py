@@ -53,6 +53,7 @@ class Card:
         self.name = self._data['name']
         self.id = self._data['id']
         self._labels = None
+        self._members = None
 
     def __repr__(self):
         return "Card: " + json.dumps(self._data, indent = 4, sort_keys = True)
@@ -66,6 +67,16 @@ class Card:
                 self._labels[label.name] = label
 
         return self._labels
+
+    @property
+    def members(self):
+        return self._data['idMembers']
+
+    @members.setter
+    def members(self, members):
+        self._session.request('PUT',
+                              '/1/cards/{}/idMembers'.format(self.id),
+                              {'value': ','.join(members)})
 
     @property
     def shortUrl(self):
