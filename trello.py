@@ -79,6 +79,16 @@ class Card:
 
         return self._label_ids
 
+    def addLabel(self, label):
+        self._session.request('POST',
+                              '/1/cards/{}/idLabels'.format(self.id),
+                              {'value': label})
+
+    def deleteLabel(self, label):
+        self._session.request('DELETE',
+                              '/1/cards/{}/idLabels/{}'.format(self.id, label),
+                              {'value': label})
+
     @property
     def members(self):
         return self._data['idMembers']
