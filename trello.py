@@ -53,6 +53,7 @@ class Card:
         self.name = self._data['name']
         self.id = self._data['id']
         self._labels = None
+        self._label_ids = None
         self._members = None
 
     def __repr__(self):
@@ -67,6 +68,16 @@ class Card:
                 self._labels[label.name] = label
 
         return self._labels
+
+    @property
+    def label_ids(self):
+        if self._label_ids == None:
+            self._label_ids = {}
+            for l in self._data['labels']:
+                label = self.labels[l['name']]
+                self._label_ids[label.id] = label
+
+        return self._label_ids
 
     @property
     def members(self):
