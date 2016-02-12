@@ -100,6 +100,16 @@ class Card:
                               {'value': ','.join(members)})
 
     @property
+    def desc(self):
+        return self._data['desc']
+
+    @desc.setter
+    def desc(self, description):
+        self._session.request('PUT',
+                              '/1/cards/{}/desc'.format(self.id),
+                              {'value': description})
+
+    @property
     def shortUrl(self):
         return self._data['shortUrl']
 
