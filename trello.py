@@ -59,6 +59,12 @@ class Card:
     def __repr__(self):
         return "Card: " + json.dumps(self._data, indent = 4, sort_keys = True)
 
+    def changeList( self, idList ):
+        print ( '/1/cards/{}/idList'.format(self.id) )
+        self._session.request('PUT', 
+                              '/1/cards/{}/idList'.format(self.id),
+                              { "value": idList } )
+
     @property
     def labels(self):
         if self._labels == None:
@@ -120,6 +126,7 @@ class Card:
 
     def delete(self):
         self._session.request('DELETE', '/1/cards/{}'.format(self.id))
+
 
 class List:
     def __init__(self, session, data):
