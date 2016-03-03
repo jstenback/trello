@@ -60,7 +60,6 @@ class Card:
         return "Card: " + json.dumps(self._data, indent = 4, sort_keys = True)
 
     def changeList( self, idList ):
-        print ( '/1/cards/{}/idList'.format(self.id) )
         self._session.request('PUT', 
                               '/1/cards/{}/idList'.format(self.id),
                               { "value": idList } )
