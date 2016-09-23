@@ -126,6 +126,15 @@ class Card:
     def delete(self):
         self._session.request('DELETE', '/1/cards/{}'.format(self.id))
 
+    @property
+    def listId(self):
+        return self._data['idList']
+
+    @listId.setter
+    def listId(self, newid):
+        self._session.request('PUT',
+                              '/1/cards/{}/idList'.format(self.id),
+                              {'value': newid})
 
 class List:
     def __init__(self, session, data):
@@ -204,6 +213,7 @@ class Board:
         self._lists = None
         self._labels = None
         self._members = None
+        self._cards = None
 
     def __repr__(self):
         return "Board: " + json.dumps(self._data, indent = 4, sort_keys = True)
@@ -215,11 +225,20 @@ class Board:
                                           .format(self.id))
 
             self._lists = {}
+            self._listsById = {}
 
             for list in lists:
-                self._lists[list['name']] = List(self._session, list)
+                l = List(self._session, list)
+                self._lists[list['name']] = l
+                self._listsById[list['id']] = l
 
         return self._lists
+
+    @property
+    def listsById(self):
+        self.lists
+
+        return self._listsById
 
     @property
     def labels(self):
@@ -241,12 +260,20 @@ class Board:
                                             .format(self.id))
 
             self._members = {}
+            self._membersById = {}
 
             for member in members:
-                self._members[member['username']] = Member(self._session,
-                                                           member)
+                m = Member(self._session, member)
+                self._members[member['username']] = m
+                self._membersById[member['id']] = m
 
         return self._members
+
+    @property
+    def membersById(self):
+        self.members
+
+        return self._membersById
 
     def addMember(self, name, member_type = 'normal'):
         self._session.request('PUT', '/1/boards/{}/members/{}' \
@@ -262,3 +289,25 @@ class Board:
     def copyMembers(self, to_board):
         for member in self.members:
             to_board.addMember(self.members[member].username)
+
+    @property
+    def cards(self):
+        if self._cards == None:
+            cards = self._session.request('GET', '/1/boards/{}/cards' \
+                                          .format(self.id))
+
+            self._cards = {}
+            self._cardsById = {}
+
+            for card in cards:
+                c = Card(self._session, card)
+                self._cards[card['name']] = c
+                self._cardsById[card['id']] = c
+
+        return self._cards
+
+    @property
+    def cardsById(self):
+        self.cards
+
+        return self._cardsById
